@@ -33,3 +33,10 @@ PYTHONPATH=src python -m unittest discover -s tests
 ## Edge you will hit
 
 Boolean values are rejected as time components. `to_decimal(True, 0, 0)` raises `InvalidTimeError` rather than silently treating `True` as `1`. If you are passing values from a source that uses booleans, convert them explicitly.
+
+## Design notes
+
+The window stores values eagerly rather than keeping running aggregates. Running
+sums drift with floating point over long streams, and recomputing from a small
+buffer is cheap enough that the drift is not worth the speed.
+
